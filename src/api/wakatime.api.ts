@@ -1,3 +1,5 @@
+import { PROJECTS } from '../config/projects.config'
+
 const BASE_URL = 'https://wakatime.com/api/v1'
 
 type WakatimeDurationsResult = {
@@ -54,12 +56,56 @@ type WakatimeDurationsResult = {
 	timezone: 'Europe/Kyiv'
 }
 
+interface TimeEntriesType {
+	description: string
+	start: string
+	stop: string
+	project_id: number
+}
+
 export const testRequest = () => {
-	fetch(
-		`${BASE_URL}/users/ltlaitoff/durations?date=2023-07-09&api_key=${process.env.WAKATIME_API_KEY}`
+	return fetch(
+		`${BASE_URL}/users/ltlaitoff/durations?date=${process.env.DATA}&api_key=${process.env.WAKATIME_API_KEY}`
 	)
 		.then(value => value.json())
 		.then(value => {
-			console.table(value.data)
+			const result: TimeEntriesType[] = []
+
+			value.data.map((item: any) => {
+				const description = item.project === 'lapricot' ? '' : item.project
+				const start = new Date(item.time * 1000).toISOString()
+				const stop = new Date(
+					item.time * 1000 + item.duration * 1000
+				).toISOString()
+				const project_id =
+					item.project === 'lapricot' ? PROJECTS[1].id : PROJECTS[0].id
+
+				result.push({ start, stop, description, project_id })
+			})
+
+			return result
 		})
+
+	// const API_TOKEN = process.env.TOGGLE_TRACK_API_TOKEN
+	// // const HOST = 'https://api.track.toggl.com/api/v9'
+	// // const APP_NAME = 'wakatime-with-toggle-track-sync'
+
+	// const WORKSPACE_ID = 6741502
+
+	// return fetch(
+	// 	`https://api.track.toggl.com/api/v9/workspaces/${WORKSPACE_ID}/projects`,
+	// 	{
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 			Authorization: `Basic ${Buffer.from(`${API_TOKEN}:api_token`).toString(
+	// 				'base64'
+	// 			)}`
+	// 		}
+	// 	}
+	// )
+	// 	.then(response => response.text())
+	// 	.then(value => {
+	// 		console.log(value)
+	// 	})
 }
