@@ -1,0 +1,37 @@
+{
+	"name": "wakatime-with-toggle-track-sync",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"directories": {
+		"doc": "docs"
+	},
+	"scripts": {
+		"start": "ts-node ./src/index.ts",
+		"dev": "nodemon --watch './src/**/*.ts' --ignore './src/**/*.spec.ts' --exec 'ts-node' ./src/index.ts",
+		"build": "ts-node --transpile-only ./src/index.ts",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint . --ext .ts",
+		"format": "prettier --write ."
+	},
+	"keywords": [
+		"wakatime",
+		"toggle-track",
+		"sync"
+	],
+	"author": "ltlaitoff",
+	"license": "ISC",
+	"dependencies": {
+		"ts-node": "^10.9.1",
+		"typescript": "^5.1.6"
+	},
+	"devDependencies": {
+		"@types/node": "^20.4.1",
+		"@typescript-eslint/eslint-plugin": "^5.61.0",
+		"@typescript-eslint/parser": "^5.61.0",
+		"dotenv": "^16.3.1",
+		"eslint": "^8.44.0",
+		"nodemon": "^3.0.1",
+		"prettier": "^3.0.0"
+	}
+}

@@ -1,2 +1,5 @@
 /docs/.obsidian
 /tmp
+/node_modules
+/dist
+.env
