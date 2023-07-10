@@ -1,4 +1,5 @@
 import { PROJECTS } from '../config/projects.config'
+import { removeGapsBetweenEntries } from '../helpers/remove-gaps-between-entries.helper'
 
 const BASE_URL = 'https://wakatime.com/api/v1'
 
@@ -63,49 +64,31 @@ interface TimeEntriesType {
 	project_id: number
 }
 
-export const testRequest = () => {
-	return fetch(
+export const testRequest = async () => {
+	const response = await fetch(
 		`${BASE_URL}/users/ltlaitoff/durations?date=${process.env.DATA}&api_key=${process.env.WAKATIME_API_KEY}`
 	)
-		.then(value => value.json())
-		.then(value => {
-			const result: TimeEntriesType[] = []
+	const value = await response.json()
 
-			value.data.map((item: any) => {
-				const description = item.project === 'lapricot' ? '' : item.project
-				const start = new Date(item.time * 1000).toISOString()
-				const stop = new Date(
-					item.time * 1000 + item.duration * 1000
-				).toISOString()
-				const project_id =
-					item.project === 'lapricot' ? PROJECTS[1].id : PROJECTS[0].id
+	console.log(value.data)
 
-				result.push({ start, stop, description, project_id })
-			})
+	const newData = removeGapsBetweenEntries(value.data)
+	console.table(newData)
 
-			return result
-		})
+	const result: TimeEntriesType[] = []
 
-	// const API_TOKEN = process.env.TOGGLE_TRACK_API_TOKEN
-	// // const HOST = 'https://api.track.toggl.com/api/v9'
-	// // const APP_NAME = 'wakatime-with-toggle-track-sync'
+	newData.forEach((item: any) => {
+		const description = item.project === 'lapricot' ? '' : item.project
+		const start = new Date(item.time * 1000).toISOString()
+		const stop = new Date(item.time * 1000 + item.duration * 1000).toISOString()
+		const project_id =
+			item.project === 'lapricot' ? PROJECTS[1].id : PROJECTS[0].id
 
-	// const WORKSPACE_ID = 6741502
+		result.push({ start, stop, description, project_id })
+	})
 
-	// return fetch(
-	// 	`https://api.track.toggl.com/api/v9/workspaces/${WORKSPACE_ID}/projects`,
-	// 	{
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 			Authorization: `Basic ${Buffer.from(`${API_TOKEN}:api_token`).toString(
-	// 				'base64'
-	// 			)}`
-	// 		}
-	// 	}
-	// )
-	// 	.then(response => response.text())
-	// 	.then(value => {
-	// 		console.log(value)
-	// 	})
+	console.table(result)
+
+	return []
+	// return result
 }
