@@ -1,4 +1,4 @@
-import { WakatimeDurationElement } from './remove-gaps-between-entries.interfaces'
+import { WakatimeDurationElement } from '../types/Wakatime.types'
 
 const swapElements = (
 	array: WakatimeDurationElement[],

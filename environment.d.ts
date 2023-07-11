@@ -4,6 +4,7 @@ declare global {
 			NODE_ENV: 'development' | 'production'
 			WAKATIME_API_KEY: string
 			TOGGLE_TRACK_API_TOKEN: string
+			WAKATIME_USER_NAME: string
 		}
 	}
 }
